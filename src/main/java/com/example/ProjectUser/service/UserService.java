@@ -44,6 +44,24 @@ public class UserService {
 
     }
 
+    public UserEntity updateUser(long id, UserEntity userUpdated) throws UserAlreadyExistException {
+        if (checkUser(userUpdated)){
+            throw new UserAlreadyExistException("This user already exist.");
+        }
+        UserEntity user = userRepository.getById(id);
+
+        user.setId(userUpdated.getId());
+        user.setCreated_at(userUpdated.getCreated_at());
+        user.setEmail(userUpdated.getEmail());
+        user.setPassword(userUpdated.getPassword());
+
+        return user;
+    }
+
+    public void deleteUser(long id){
+        userRepository.deleteById(id);
+    }
+
     private boolean checkUser(UserEntity userEntity){
         List<UserEntity> users = userRepository.findAll();
         for (UserEntity user : users){
